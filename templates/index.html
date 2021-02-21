@@ -3,7 +3,7 @@
 	<head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
-	<title>dnsmasq-web</title>
+	<title>PiSpot</title>
 	</head>
 	<style>
 		body {
@@ -33,9 +33,9 @@
 				$('#leases').append(
 					$.map(data.leases, function(ignore, index) {
 						return '<tr>' +
-							'<td>' + data.leases[index].ipAddress + '</td>' +
+							'<td><a href="http://' + data.leases[index].ipAddress + '/">' + data.leases[index].ipAddress + '</a></td>' +
 							'<td>' + data.leases[index].macAddress + '</td>' +
-							'<td>' + data.leases[index].name + '</td>' +
+							'<td><a href="http://' + data.leases[index].name + '">' + data.leases[index].name + '</a></td>' +
 							'<td>' + ( (data.leases[index].staticIP) ? 'Yes' : 'No' ) + '</td>' +
 							'<td>' + ( (data.leases[index].staticIP) ? 'Never' : data.leases[index].leasetime ) + '</td>' +
 							'</tr>';

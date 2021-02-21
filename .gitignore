@@ -144,3 +144,7 @@ pyvenv.cfg
 pip-selfcheck.json
 
 # End of https://www.gitignore.io/api/macos,python,virtualenv
+
+# dev files
+*.leases
+.vscode
