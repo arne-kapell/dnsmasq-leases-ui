@@ -9,6 +9,8 @@ from flask import Flask, render_template, jsonify
 import datetime
 
 DNSMASQ_LEASES_FILE = "/var/lib/misc/dnsmasq.leases"
+# !!! dev only !!!
+#DNSMASQ_LEASES_FILE = "./dnsmasq.leases"
 
 app = Flask(__name__)
 
