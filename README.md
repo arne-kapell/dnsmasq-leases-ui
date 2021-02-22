@@ -27,6 +27,7 @@ After cloning the repository run `python dnsmasq-leases-ui.py`
 
 ```
 docker run \
+        --name pispot-web-ui \
         -p 80:5000 \
         -v /var/lib/misc/dnsmasq.leases:/var/lib/misc/dnsmasq.leases:ro  \
         --name dnsmasq-leases-ui \
