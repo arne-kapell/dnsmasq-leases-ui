@@ -27,10 +27,11 @@ After cloning the repository run `python dnsmasq-leases-ui.py`
 
 ```
 docker run \
-        -p 5000:5000 \
+        -p 80:5000 \
         -v /var/lib/misc/dnsmasq.leases:/var/lib/misc/dnsmasq.leases:ro  \
         --name dnsmasq-leases-ui \
-        fschlag/dnsmasq-leases-ui:latest
+        --restart unless-stopped \
+        dnsmasq-leases-ui:latest
 ```
 
 # How to use
