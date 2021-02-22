@@ -13,6 +13,7 @@ RUN echo '* Installing Python dependencies' \
 
 
 COPY ./templates ./templates
+COPY ./img ./img
 COPY ./dnsmasq-leases-ui.py ./
 
 EXPOSE 5000
