@@ -26,13 +26,13 @@ After cloning the repository run `python dnsmasq-leases-ui.py`
 ## Docker
 
 ```
-docker run \
+docker run -d \
         --name pispot-web-ui \
         -p 80:5000 \
         -v /var/lib/misc/dnsmasq.leases:/var/lib/misc/dnsmasq.leases:ro  \
         --name dnsmasq-leases-ui \
         --restart unless-stopped \
-        -d dnsmasq-leases-ui:latest
+        dnsmasq-leases-ui:latest
 ```
 
 # How to use
