@@ -32,7 +32,7 @@ docker run \
         -v /var/lib/misc/dnsmasq.leases:/var/lib/misc/dnsmasq.leases:ro  \
         --name dnsmasq-leases-ui \
         --restart unless-stopped \
-        dnsmasq-leases-ui:latest
+        -d dnsmasq-leases-ui:latest
 ```
 
 # How to use
