@@ -5,8 +5,9 @@
 # See https://github.com/fschlag/dnsmasq-leases-ui
 # by Florian Schlag (https://github.com/fschlag)
 #
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, send_from_directory
 import datetime
+import os
 
 DNSMASQ_LEASES_FILE = "/var/lib/misc/dnsmasq.leases"
 # !!! dev only !!!
@@ -63,6 +64,9 @@ def getLeases():
 	leases.sort(key = leaseSort)
 	return jsonify(leases=[lease.serialize() for lease in leases])
 
+@app.route("/favicon.ico")
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'img'), 'cropped-raspberrry_pi_logo-32x32.png')
 
 if __name__ == "__main__":
 	app.run("0.0.0.0")
