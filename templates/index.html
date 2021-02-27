@@ -84,6 +84,33 @@
 		border-radius: 5px 0px 0px 0px;
 		font-style: italic;
 	}
+
+	#getspeed {
+		background: rgb(188, 17, 66);
+		color: #fff;
+		border: none;
+		border-radius: 5px;
+		padding: 0.3vh 45%;
+	}
+
+	#getspeed:hover {
+		cursor: pointer;
+		/* transform: scale(1.1); */
+	}
+
+	.loader {
+		border: 0.5vh solid #f3f3f3; /* Light grey */
+		border-top: 0.5vh solid rgb(188, 17, 66);
+		border-radius: 50%;
+		width: 2rem;
+		height: 2rem;
+		animation: spin 2s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+	}
+
+	@keyframes spin {
+		0% { transform: rotate(0deg); }
+		100% { transform: rotate(360deg); }
+	}
 </style>
 
 <body>
@@ -138,6 +165,14 @@
 		</svg>
 		<h1>Spot</h1>
 	</div>
+	<!-- <h2 class="left">Status</h2> -->
+	<table id="status">
+		<tr>
+			<th>Status</th>
+			<th>IP Adress</th>
+			<th style="width: 50%;">Speed</th>
+		</tr>
+	</table>
 	<h2 class="left">Leases</h2>
 	<table id="leases">
 		<tr>
@@ -153,7 +188,7 @@
 	<script>
 		$SCRIPT_ROOT = {{ request.script_root | tojson | safe }};
 		$(function () {
-			$.getJSON($SCRIPT_ROOT + '/leases',
+			$.getJSON($SCRIPT_ROOT + '/api',
 				function (data) {
 					$('#leases').append(
 						$.map(data.leases, function (ignore, index) {
@@ -171,11 +206,26 @@
 								'<td>' + ((data.leases[index].staticIP) ? '&#8734;' : timeleft) + '</td>' +
 								'</tr>';
 						}).join())
+						$('#status').append(
+							'<tr>' +
+								'<td>' + ((data.status.online) ? 'online' : 'offline') + '</td>' +
+								'<td>' + ((data.status.online) ? data.status.ip : '---') + '</td>' +
+								'<td>' + ((data.status.online) ? '<button id="getspeed" onclick="getSpeed(this)">Speedtest</button>' : '---') + '</td>' +
+								'</tr>'
+						)
 				})
 				$('#info').append(new Date().toLocaleTimeString())
 
 			return false;
 		})
+		function getSpeed(target){
+			output = target.parentElement
+			output.innerHTML = '<div class="loader"></div>'
+			$.getJSON($SCRIPT_ROOT + '/api/speed',
+				function (data) {
+					output.innerHTML = 'DOWN: &#42780;' + data.speed.download + 'Mbit/s | UP: &#42779;' + data.speed.upload + 'Mbit/s | PING: &#730;' + data.speed.ping + 'ms <button id="getspeed" onclick="getSpeed(this)">again</button>'
+				})
+		}
 	</script>
 </body>
 

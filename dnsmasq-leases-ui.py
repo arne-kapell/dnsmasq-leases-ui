@@ -8,6 +8,8 @@
 from flask import Flask, render_template, jsonify, send_from_directory
 import datetime
 import os
+import socket
+import speedtest
 
 DNSMASQ_LEASES_FILE = "/var/lib/misc/dnsmasq.leases"
 # !!! dev only !!!
@@ -44,12 +46,40 @@ def leaseSort(arg):
 	else:
 		return arg.ipAddress
 
+class OnlineStatus:
+	def __init__(self, online, ip):
+		self.online = online
+		self.ip = ip
+
+def getOnlineStatus():
+	ownIP=socket.gethostbyname(socket.gethostname())
+	if ownIP=="127.0.0.1":
+		return OnlineStatus(False,ownIP)
+	else:
+		return OnlineStatus(True,ownIP)
+
+class SpeedResult:
+	def __init__(self, down, up, ping):
+		self.download = down
+		self.upload = up
+		self.ping = ping
+
+def getSpeed():
+	st = speedtest.Speedtest()
+	down = st.download()
+	up = st.upload()
+	servernames =[]   
+	st.get_servers(servernames)
+	ping = st.results.ping
+	return SpeedResult(down, up, ping)
+
 @app.route("/")
 def index():
 	return render_template('index.html')
 
-@app.route("/leases")
-def getLeases():
+@app.route("/api")
+def getInfo():
+	online = getOnlineStatus()
 	leases = list()
 	with open(DNSMASQ_LEASES_FILE) as f:
 		for line in f:
@@ -62,7 +92,13 @@ def getLeases():
 				leases.append(entry)
 
 	leases.sort(key = leaseSort)
-	return jsonify(leases=[lease.serialize() for lease in leases])
+	return jsonify(status={'online': online.online, 'ip': online.ip}, leases=[lease.serialize() for lease in leases])
+
+@app.route("/api/speed")
+def showSpeed():
+	speed = getSpeed()
+	return jsonify(speed={'download': round(speed.download*0.000001, 3), 'upload': round(speed.upload*0.000001, 3), 'ping': round(speed.ping, 0)})
+
 
 @app.route("/favicon.ico")
 def favicon():
