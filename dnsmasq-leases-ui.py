@@ -52,7 +52,9 @@ class OnlineStatus:
 		self.ip = ip
 
 def getOnlineStatus():
-	ownIP=socket.gethostbyname(socket.gethostname())
+	ownIP = os.popen("echo $DOCKER_HOST").readline()
+	# print(ownIP)
+	# ownIP=socket.gethostbyname(socket.gethostname())
 	if ownIP=="127.0.0.1":
 		return OnlineStatus(False,ownIP)
 	else:
