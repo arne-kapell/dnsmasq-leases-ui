@@ -12,9 +12,8 @@ After cloning the repository run `python dnsmasq-leases-ui.py`
 
 ```
 docker run -d \
-        --name pispot-web-ui \
         -p 80:5000 \
-        -e "DOCKER_HOST=$(ip -4 a show wlan0 | grep -Po 'inet \K[\d.]+')" \
+        -e "DOCKER_HOST=$(ip -4 a show $(route | grep '^default' | grep -o '[^ ]*$') | grep -Po 'inet \K[\d.]+')" \
         -v /var/lib/misc/dnsmasq.leases:/var/lib/misc/dnsmasq.leases:ro  \
         --name dnsmasq-leases-ui \
         --restart unless-stopped \
